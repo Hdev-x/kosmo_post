@@ -11,7 +11,29 @@
   </select>
   
   
-  
+  <insert id="create" parameterType="QnaDTO">
+  	insert into "TB_QNA" (
+  			"BOARD_NUM"
+			"BOARD_TITLE",
+			"BOARD_WRITER",
+			"BOARD_CONTENTS",
+			"BOARD_DATE",
+			"BOARD_HIT",
+			"BOARD_REF",
+			"BOARD_STEP",
+			"BOARD_DEPTH"
+		) values (
+			DEFAULT,
+			#{boardTitle},
+			#{boardWriter},
+			#{boardContents},
+			now(),
+			0,
+			0,
+			0,
+			0
+		)
+  </insert>
   
   
   

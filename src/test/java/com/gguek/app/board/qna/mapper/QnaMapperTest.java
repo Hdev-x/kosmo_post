@@ -9,12 +9,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.gguek.app.board.common.dto.BoardDTO;
+import com.gguek.app.board.notice.dto.NoticeDTO;
+import com.gguek.app.board.qna.dto.QnaDTO;
 
 @SpringBootTest
 class QnaMapperTest {
 
 	@Autowired
 	private QnaMapper qnaMapper;
+	
+	@Test
+	void testCreate()throws Exception{
+		for(int i=0;i<23;i++) {
+			QnaDTO qnaDTO = new QnaDTO();
+			qnaDTO.setBoardTitle("Q&A title"+i);
+			qnaDTO.setBoardWriter("Q&A writer"+i);
+			qnaDTO.setBoardContents("Q&A contents"+i);
+			qnaMapper.create(qnaDTO);
+			if (i%3==0) {
+				Thread.sleep(500);
+			}
+			
+		}
+		
+		System.out.println("END");
+	}
+	
 	
 	@Test
 	void testList() throws Exception{
