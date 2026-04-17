@@ -7,18 +7,45 @@
 <mapper
 	namespace="com.gguek.app.board.notice.mapper.NoticeMapper">
 
-	<select id="list" resultType="NoticeDTO">
-		select * from "TB_NOTICE"
+	<sql id="search_sql">
+		where
+		<choose>
+			<when test="kind == 'v2'">"BOARD_CONTENTS"</when>
+			<when test="kind == 'v3'">"BOARD_WRITER"</when>
+			<otherwise>"BOARD_TITLE"</otherwise>
+		</choose>
+		like concat('%',#{search},'%')
+	</sql>
+
+<select id="getCount" resultType="Long" parameterType="Pager">
+	select count("BOARD_NUM") from "TB_NOTICE"
+	<include refid="search_sql"></include>
+</select>
+
+	<select id="list" resultType="NoticeDTO" parameterType="Pager">
+		select *
+		from
+			"TB_NOTICE"
+		<include refid="search_sql"></include>
+		order by
+			"BOARD_NUM" desc
+		limit
+			#{perPage}
+		offset
+			#{startNum}
 	</select>
 
-	<insert id="create" parameterType="NoticeDTO">
-		INSERT INTO "TB_NOTICE" (
+	<insert id="create" parameterType="NoticeDTO" useGeneratedKeys="true" keyProperty="boardNum">
+		INSERT INTO
+		"TB_NOTICE" (
+			"BOARD_NUM",
 			"BOARD_TITLE",
 			"BOARD_WRITER",
 			"BOARD_CONTENTS",
 			"BOARD_DATE",
 			"BOARD_HIT"
 		) VALUES (
+			DEFAULT,
 			#{boardTitle},
 			#{boardWriter},
 			#{boardContents},
@@ -27,6 +54,17 @@
 		)
 	</insert>
 
+
+<insert id="createFile" parameterType="NoticeFileDTO">
+	insert into
+		"TB_NOTICE_FILE"
+	values(
+		DEFAULT,
+		#{fileName},
+		#{originName},
+		#{boardNum}
+	)	
+</insert>
 
 
 

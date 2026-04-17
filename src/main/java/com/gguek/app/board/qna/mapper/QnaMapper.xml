@@ -3,17 +3,42 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
-  <mapper namespace="com.gguek.app.board.qna.mapper.QnaMapper">
-  
-  <select id="list" resultType="QnaDTO">
-  	select * from "TB_QNA"
-  </select>
-  
-  
-  <insert id="create" parameterType="QnaDTO">
-  	insert into "TB_QNA" (
-  			"BOARD_NUM"
+
+<mapper namespace="com.gguek.app.board.qna.mapper.QnaMapper">
+
+	<sql id="search_sql">
+		where
+		<choose>
+			<when test="kind == 'v2'">"BOARD_CONTENTS"</when>
+			<when test="kind == 'v3'">"BOARD_WRITER"</when>
+			<otherwise>"BOARD_TITLE"</otherwise>
+		</choose>
+		like concat('%',#{search},'%')
+	</sql>
+
+<select id="getCount" resultType="Long" parameterType="Pager">
+	select count("BOARD_NUM") from "TB_QNA"
+	<include refid="search_sql"></include>
+</select>
+
+	<select id="list" resultType="QnaDTO" parameterType="Pager">
+		select *
+		from
+			"TB_QNA"
+			<include refid="search_sql"></include>
+		order by
+			"BOARD_NUM" desc
+		limit
+			#{perPage}
+		offset
+			#{startNum}
+	</select>
+
+
+	<insert id="create" parameterType="QnaDTO" useGeneratedKeys="true" keyProperty="boardNum">
+		insert into
+		"TB_QNA" (
+			"BOARD_NUM",
 			"BOARD_TITLE",
 			"BOARD_WRITER",
 			"BOARD_CONTENTS",
@@ -22,7 +47,8 @@
 			"BOARD_REF",
 			"BOARD_STEP",
 			"BOARD_DEPTH"
-		) values (
+		)
+		values (
 			DEFAULT,
 			#{boardTitle},
 			#{boardWriter},
@@ -33,16 +59,27 @@
 			0,
 			0
 		)
-  </insert>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  </mapper>
+	</insert>
+	
+	<insert id="createFile" parameterType="QnaFileDTO">
+		insert into
+			"TB_QNA_FILE"
+		values(
+			DEFAULT,
+			#{fileName},
+			#{originName},
+			#{boardNum}
+		)
+	</insert>
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
