@@ -1,6 +1,9 @@
 package com.gguek.app.board.common.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.gguek.app.file.dto.FileDTO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,5 +20,9 @@ public class BoardDTO {
 	private String boardContents;
 	private LocalDateTime boardDate;
 	private Long boardHit;
+	
+	
+	private List<FileDTO> list;
+	
 	
 }

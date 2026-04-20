@@ -1,5 +1,6 @@
 package com.gguek.app.board.notice.service;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.gguek.app.board.common.dto.BoardDTO;
 import com.gguek.app.board.common.service.BoardService;
 import com.gguek.app.board.notice.dto.NoticeFileDTO;
 import com.gguek.app.board.notice.mapper.NoticeMapper;
+import com.gguek.app.file.dto.FileDTO;
 import com.gguek.app.file.manager.FileManager;
 import com.gguek.app.pager.Pager;
 
@@ -37,7 +39,7 @@ public class NoticeService implements BoardService{
 	@Override
 	public BoardDTO detail(BoardDTO boardDTO) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return noticeMapper.detail(boardDTO);
 	}
 
 	@Override
@@ -63,15 +65,23 @@ public class NoticeService implements BoardService{
 	}
 
 	@Override
-	public int update(BoardDTO boardDTO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	public int update(BoardDTO boardDTO, MultipartFile [] attach) throws Exception {
+		int result = noticeMapper.update(boardDTO);
+		return result;
 	}
 
 	@Override
 	public int delete(BoardDTO boardDTO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		//파일명 조회
+		boardDTO = noticeMapper.detail(boardDTO);
+		
+		//HDD에서 파일 삭제
+		for (FileDTO fileDTO:boardDTO.getList()) {
+			fileManager.fileDelete(name, fileDTO);
+		}
+		//DB에서 삭제
+		int result = noticeMapper.delete(boardDTO);
+		return result;
 	}
 	
 	

@@ -16,68 +16,131 @@
 		like concat('%',#{search},'%')
 	</sql>
 
-<select id="getCount" resultType="Long" parameterType="Pager">
-	select count("BOARD_NUM") from "TB_QNA"
-	<include refid="search_sql"></include>
-</select>
+	<select id="getCount" resultType="Long" parameterType="Pager">
+		select count("BOARD_NUM") from "TB_QNA"
+		<include refid="search_sql"></include>
+	</select>
 
 	<select id="list" resultType="QnaDTO" parameterType="Pager">
 		select *
 		from
-			"TB_QNA"
-			<include refid="search_sql"></include>
+		"TB_QNA"
+		<include refid="search_sql"></include>
 		order by
-			"BOARD_NUM" desc
+		"BOARD_NUM" desc
 		limit
-			#{perPage}
+		#{perPage}
 		offset
-			#{startNum}
+		#{startNum}
 	</select>
 
 
-	<insert id="create" parameterType="QnaDTO" useGeneratedKeys="true" keyProperty="boardNum">
+
+	<select id="detail" parameterType="QnaDTO"
+		resultMap="detailResult">
+		SELECT *
+		FROM
+		"TB_QNA" N
+		LEFT JOIN
+		"TB_QNA_FILE" F
+		USING
+		("BOARD_NUM")
+		WHERE
+		"BOARD_NUM" = #{boardNum}
+
+	</select>
+
+
+	<resultMap type="QnaDTO" id="detailResult">
+		<id column="BOARD_NUM" property="boardNum" />
+		<result column="BOARD_TITLE" property="boardTitle" />
+		<result column="BOARD_WRITER" property="boardWriter" />
+		<result column="BOARD_CONTENTS" property="boardContents" />
+		<result column="BOARD_DATE" property="boardDate" />
+		<result column="BOARD_HIT" property="boardHit" />
+		<collection property="list" javaType="java.util.List"
+			ofType="FileDTO">
+			<id column="FILE_NUM" property="fileNum" />
+			<result column="FILE_NAME" property="fileName" />
+			<result column="ORIGIN_NAME" property="originName" />
+		</collection>
+	</resultMap>
+
+
+
+
+	<insert id="create" parameterType="QnaDTO"
+		useGeneratedKeys="true" keyProperty="boardNum">
 		insert into
 		"TB_QNA" (
-			"BOARD_NUM",
-			"BOARD_TITLE",
-			"BOARD_WRITER",
-			"BOARD_CONTENTS",
-			"BOARD_DATE",
-			"BOARD_HIT",
-			"BOARD_REF",
-			"BOARD_STEP",
-			"BOARD_DEPTH"
+		"BOARD_NUM",
+		"BOARD_TITLE",
+		"BOARD_WRITER",
+		"BOARD_CONTENTS",
+		"BOARD_DATE",
+		"BOARD_HIT",
+		"BOARD_REF",
+		"BOARD_STEP",
+		"BOARD_DEPTH"
 		)
 		values (
-			DEFAULT,
-			#{boardTitle},
-			#{boardWriter},
-			#{boardContents},
-			now(),
-			0,
-			0,
-			0,
-			0
+		DEFAULT,
+		#{boardTitle},
+		#{boardWriter},
+		#{boardContents},
+		now(),
+		0,
+		0,
+		0,
+		0
 		)
 	</insert>
-	
+
 	<insert id="createFile" parameterType="QnaFileDTO">
 		insert into
-			"TB_QNA_FILE"
+		"TB_QNA_FILE"
 		values(
-			DEFAULT,
-			#{fileName},
-			#{originName},
-			#{boardNum}
+		DEFAULT,
+		#{fileName},
+		#{originName},
+		#{boardNum}
 		)
 	</insert>
 
 
 
+	<update id="update">
+		update
+		"TB_QNA"
+		set
+		"BOARD_TITLE"=#{boardTitle},
+		"BOARD_CONTENTS"=#{boardContents}
+		where
+		"BOARD_NUM"=#{boardNum}
+	</update>
 
 
+<delete id="delete" parameterType="QnaDTO">
+	delete from "TB_QNA"
+	where
+		"BOARD_NUM"=#{boardNum}
+</delete>
 
 
+<delete id="fileDelete" parameterType="FileDTO">
+	DELETE FROM "TB_QNA_FILE"
+	WHERE "FILE_NUM"=#{fileNum}
+</delete>
+
+<delete id="fileDeleteFor" parameterType="java.util.List">
+	DELETE FROM "TB_QNA_FILE"
+	WHERE "FILE_NUM" IN
+		<foreach item="item" index="index" collection="list"
+			open="(" separator="," close=")"
+		>
+			#{item.fileNum}
+		</foreach>
+</delete>
 
 
 

@@ -20,7 +20,7 @@ public interface BoardService {
 	int create(BoardDTO boardDTO, MultipartFile [] attach) throws Exception;
 
 	// update
-	int update(BoardDTO boardDTO) throws Exception;
+	int update(BoardDTO boardDTO, MultipartFile [] attach) throws Exception;
 
 	// delete
 	int delete(BoardDTO boardDTO) throws Exception;

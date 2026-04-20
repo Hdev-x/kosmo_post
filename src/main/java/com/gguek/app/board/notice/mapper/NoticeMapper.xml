@@ -35,6 +35,38 @@
 			#{startNum}
 	</select>
 
+
+<select id="detail" parameterType="NoticeDTO" resultMap="detailResult">
+	SELECT *
+	FROM
+		"TB_NOTICE" N
+	LEFT JOIN
+		"TB_NOTICE_FILE" F
+		USING ("BOARD_NUM")
+	WHERE
+		"BOARD_NUM" = #{boardNum}
+		
+</select>
+
+
+<resultMap type="NoticeDTO" id="detailResult">
+<id column="BOARD_NUM" property="boardNum"/>
+<result column="BOARD_TITLE" property="boardTitle"/>
+<result column="BOARD_WRITER" property="boardWriter"/>
+<result column="BOARD_CONTENTS" property="boardContents"/>
+<result column="BOARD_DATE" property="boardDate"/>
+<result column="BOARD_HIT" property="boardHit"/>
+<collection property="list" javaType="java.util.List" ofType="FileDTO">
+<id column="FILE_NUM" property="fileNum"/>
+<result column="FILE_NAME" property="fileName"/>
+<result column="ORIGIN_NAME" property="originName"/>
+</collection>
+</resultMap>
+
+
+
+
+
 	<insert id="create" parameterType="NoticeDTO" useGeneratedKeys="true" keyProperty="boardNum">
 		INSERT INTO
 		"TB_NOTICE" (
@@ -68,9 +100,23 @@
 
 
 
+<update id="update">
+	update
+		"TB_NOTICE"
+	set
+		"BOARD_TITLE"=#{boardTitle},
+		"BOARD_CONTENTS"=#{boardContents}
+	where
+	"BOARD_NUM"=#{boardNum}
+</update>
 
 
 
+<delete id="delete" parameterType="NoticeDTO">
+	delete from "TB_NOTICE"
+	where
+		"BOARD_NUM"=#{boardNum}
+</delete>
 
 
 

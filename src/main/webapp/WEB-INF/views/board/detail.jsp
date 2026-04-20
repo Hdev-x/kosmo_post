@@ -78,14 +78,14 @@
 
 									<div class="d-flex justify-content-end mt-4">
 										<a class="btn btn-primary btn-icon-split mr-2"
-											href="./update?boardNo=${d.boardNo}"> <span
+											href="./update?boardNum=${d.boardNum}"> <span
 											class="icon text-white-50"><i class="fas fa-edit"></i></span>
 											<span class="text">수정</span>
 										</a>
 
 										<form action="./delete" method="post"
 											onsubmit="return confirm('정말 삭제하시겠습니까?');">
-											<input type="hidden" name="boardNo" value="${d.boardNo}">
+											<input type="hidden" name="boardNum" value="${d.boardNum}">
 											<button class="btn btn-danger btn-icon-split" type="submit">
 												<span class="icon text-white-50"><i
 													class="fas fa-trash"></i></span> <span class="text">삭제</span>

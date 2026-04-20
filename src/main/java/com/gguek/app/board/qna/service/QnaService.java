@@ -11,6 +11,7 @@ import com.gguek.app.board.common.dto.BoardDTO;
 import com.gguek.app.board.common.service.BoardService;
 import com.gguek.app.board.qna.dto.QnaFileDTO;
 import com.gguek.app.board.qna.mapper.QnaMapper;
+import com.gguek.app.file.dto.FileDTO;
 import com.gguek.app.file.manager.FileManager;
 import com.gguek.app.pager.Pager;
 
@@ -37,7 +38,7 @@ public class QnaService implements BoardService{
 	@Override
 	public BoardDTO detail(BoardDTO boardDTO) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return qnaMapper.detail(boardDTO);
 	}
 
 	@Override
@@ -65,15 +66,26 @@ public class QnaService implements BoardService{
 	}
 
 	@Override
-	public int update(BoardDTO boardDTO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	public int update(BoardDTO boardDTO, MultipartFile [] attach) throws Exception {
+		int result = qnaMapper.update(boardDTO);
+		return result;
 	}
 
 	@Override
 	public int delete(BoardDTO boardDTO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		//파일명 조회
+		boardDTO = qnaMapper.detail(boardDTO);
+		
+		//HDD에서 파일 삭제
+		for (FileDTO fileDTO:boardDTO.getList()) {
+			fileManager.fileDelete(name, fileDTO);
+			// qnaMapper.fileDelete(fileDTO);
+		}
+		qnaMapper.fileDeleteFor(boardDTO.getList());
+		
+		//DB에서 삭제
+		int result = qnaMapper.delete(boardDTO);
+		return result;
 	}
 	
 	
