@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gguek.app.member.mapper.MemberMapper">
+
+	<!-- INSERT: 회원 가입 -->
+	<insert id="join"
+		parameterType="com.gguek.app.member.dto.MemberDTO">
+		INSERT INTO
+		"TB_MEMBER"
+		(
+			username,
+			name,
+			password,
+			phone,
+			email,
+			birth
+		)
+		VALUES
+		(
+			#{username},
+			#{name},
+			#{password},
+			#{phone},
+			#{email},
+			#{birth}
+		)
+	</insert>
+
+
+	<!-- 프로필 -->
+	<insert id="addProfile"
+		parameterType="com.gguek.app.member.dto.ProfileDTO">
+		INSERT INTO "TB_PROFILE"
+		(
+			file_name,
+			origin_name,
+			username
+		)
+		VALUES
+		(
+			#{fileName},
+			#{originName},
+			#{username},
+			
+		)
+	</insert>
+
+
+	<!-- SELECT: 회원 조회 (ID로) -->
+	<select id="select" parameterType="String"
+		resultType="com.gguek.app.member.dto.MemberDTO">
+		SELECT * FROM "TB_MEMBER"
+		WHERE username = #{username}
+	</select>
+
+
+	<!-- UPDATE: 회원 정보 수정 -->
+	<update id="update"
+		parameterType="com.gguek.app.member.dto.MemberDTO">
+		UPDATE "TB_MEMBER"
+		SET
+		name = #{name},
+		password =
+		#{password},
+		phone = #{phone},
+		email = #{email},
+		birth = #{birth}
+		WHERE
+		username = #{username}
+	</update>
+
+
+	<!-- DELETE: 회원 삭제 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM "TB_MEMBER"
+		WHERE
+		username = #{username}
+	</delete>
+
+
+	<!-- SELECT: 중복 확인 -->
+	<select id="selectOne" parameterType="String"
+		resultType="com.gguek.app.member.dto.MemberDTO">
+		SELECT * FROM "TB_MEMBER"
+		WHERE username = #{username}
+	</select>
+
+
+</mapper>
