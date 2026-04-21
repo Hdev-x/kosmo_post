@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gguek.app.board.product.mapper.ProductMapper">
+	
+	<sql id="search_sql">
+		WHERE
+		<choose>
+			<when test="kind == 'v2'">"PRODUCT_DESC"</when>
+			<otherwise>"PRODUCT_NAME"</otherwise>
+		</choose>
+		LIKE concat('%', #{search}, '%')
+	</sql>
+	
+	<select id="getCount" resultType="Long" parameterType="Pager">
+		SELECT COUNT("PRODUCT_NUM") FROM "TB_PRODUCT"
+		<include refid="search_sql"></include>
+	</select>
+	
+	<select id="list" resultType="ProductDTO" parameterType="Pager">
+		SELECT "PRODUCT_NUM", "PRODUCT_NAME", "PRODUCT_DESC", "PRODUCT_TYPE", "PRODUCT_RATE" 
+		FROM "TB_PRODUCT"
+		<include refid="search_sql"></include>
+		ORDER BY "PRODUCT_NUM" DESC
+		LIMIT #{perPage} OFFSET #{startNum}
+	</select>
+	
+	<select id="detail" parameterType="ProductDTO" resultType="ProductDTO">
+		SELECT "PRODUCT_NUM", "PRODUCT_NAME", "PRODUCT_DESC", "PRODUCT_TYPE", "PRODUCT_RATE" 
+		FROM "TB_PRODUCT"
+		WHERE "PRODUCT_NUM"=#{productNum}
+	</select>
+	
+	<insert id="create" parameterType="ProductDTO" useGeneratedKeys="true" keyProperty="productNum">
+		INSERT INTO "TB_PRODUCT" ("PRODUCT_NAME", "PRODUCT_DESC", "PRODUCT_TYPE", "PRODUCT_RATE")
+		VALUES (#{productName}, #{productDesc}, #{productType}, #{productRate})
+	</insert>
+	
+	<update id="update" parameterType="ProductDTO">
+		UPDATE "TB_PRODUCT"
+		SET 
+			"PRODUCT_NAME"=#{productName},
+			"PRODUCT_DESC"=#{productDesc},
+			"PRODUCT_TYPE"=#{productType},
+			"PRODUCT_RATE"=#{productRate}
+		WHERE "PRODUCT_NUM"=#{productNum}
+	</update>
+	
+	<delete id="delete" parameterType="ProductDTO">
+		DELETE FROM "TB_PRODUCT"
+		WHERE "PRODUCT_NUM"=#{productNum}
+	</delete>
+
+</mapper>

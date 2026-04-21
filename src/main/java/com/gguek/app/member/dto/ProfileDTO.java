@@ -1,7 +1,15 @@
 package com.gguek.app.member.dto;
 
-public class ProfileDTO extends MemberDTO{
+import com.gguek.app.file.dto.FileDTO;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class ProfileDTO extends FileDTO{
 	
 	private String username;
-
 }
