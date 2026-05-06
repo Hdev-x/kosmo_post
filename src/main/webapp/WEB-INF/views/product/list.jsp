@@ -61,7 +61,7 @@
 	width: fit-content;
 }
 
-.product-desc {
+.product-contents {
 	font-size: 13px;
 	color: #666;
 	margin-bottom: 15px;
@@ -93,6 +93,36 @@
 .product-rate-unit {
 	font-size: 14px;
 	color: #666;
+}
+
+/* 장바구니 버튼 스타일 */
+.btn-cart-floating {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.9);
+	border: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #4e73df;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	z-index: 10; /* 카드 클릭보다 우선순위 높임 */
+	transition: all 0.2s ease;
+}
+
+.btn-cart-floating:hover {
+	background-color: #4e73df;
+	color: white;
+	transform: scale(1.1);
+}
+
+/* 카드가 상대 좌표의 기준이 되도록 수정 */
+.product-card {
+	position: relative;
 }
 </style>
 </head>
@@ -144,28 +174,51 @@
 					<div class="row">
 						<c:forEach items="${list}" var="d">
 							<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-								<a href="./detail?productNum=${d.productNum}"
-									class="text-decoration-none text-dark">
-									<div
-										class="card product-card border-0 shadow-sm ${d.productType == '대출' ? 'loan' : d.productType == '적금' ? 'savings' : 'deposit'}">
-										<div class="product-body">
-											<h5 class="product-name">${d.productName}</h5>
+								<div class="product-card-container" style="position: relative;">
 
-											<div class="product-type">${d.productType}</div>
+									<a href="./detail?productNum=${d.productNum}"
+										class="text-decoration-none text-dark">
+										<div
+											class="card product-card border-0 shadow-sm ${d.productType == '대출' ? 'loan' : d.productType == '적금' ? 'savings' : 'deposit'}">
 
-											<p class="product-desc">${d.productDesc}</p>
+											<div class="product-img-wrapper"
+												style="height: 160px; overflow: hidden; background-color: #f8f9fc; position: relative;">
+												<button type="button" class="btn-cart-floating add-to-cart"
+													data-pn="${d.productNum}">
+													<i class="fas fa-shopping-cart"></i>
+												</button>
 
-											<div class="product-rate-section">
-												<div class="product-rate-label">기준이율</div>
-												<div class="product-rate">
-													<fmt:formatNumber value="${d.productRate}" type="number"
-														maxFractionDigits="2" minFractionDigits="2" />
-													<span class="product-rate-unit">%</span>
+												<c:choose>
+													<c:when test="${not empty d.productFileDTO.fileName}">
+														<img src="/files/product/${d.productFileDTO.fileName}"
+															class="card-img-top"
+															style="width: 100%; height: 100%; object-fit: cover;">
+													</c:when>
+													<c:otherwise>
+														<div
+															class="d-flex align-items-center justify-content-center h-100">
+															<i class="fas fa-university fa-3x text-gray-300"></i>
+														</div>
+													</c:otherwise>
+												</c:choose>
+											</div>
+
+											<div class="product-body">
+												<h5 class="product-name">${d.productName}</h5>
+												<div class="product-type">${d.productType}</div>
+												<p class="product-contents">${d.productContents}</p>
+												<div class="product-rate-section">
+													<div class="product-rate-label">기준이율</div>
+													<div class="product-rate">
+														<fmt:formatNumber value="${d.productRate}" type="number"
+															maxFractionDigits="2" minFractionDigits="2" />
+														<span class="product-rate-unit">%</span>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-								</a>
+									</a>
+								</div>
 							</div>
 						</c:forEach>
 					</div>
@@ -204,5 +257,7 @@
 		</div>
 	</div>
 	<c:import url="/WEB-INF/views/temp/footer_script.jsp"></c:import>
+	
+	<script src="/js/cart/list-cart.js"></script>
 </body>
 </html>

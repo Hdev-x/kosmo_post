@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gguek.app.review.mapper.ReviewMapper">
+
+
+	<select id="list" parameterType="ReviewDTO" resultType="ReviewDTO">
+		select *
+		from "TB_REVIEW"
+		where "PRODUCT_NUM"=#{productNum}
+		order by "REVIEW_NUM" DESC
+	</select>
+
+
+	<insert id="create" parameterType="ReviewDTO">
+		insert into "TB_REVIEW" (
+			"USERNAME",
+			"REVIEW_CONTENTS",
+			"REVIEW_STAR",
+			"REVIEW_DATE",
+			"PRODUCT_NUM"
+		) values (
+			#{username},
+			#{reviewContents},
+			#{reviewStar},
+			now(),
+			#{productNum}
+		)
+	</insert>
+	
+	
+	<update id="update" parameterType="ReviewDTO">
+		update "TB_REVIEW"
+		set
+			"REVIEW_CONTENTS" = #{reviewContents},
+			"REVIEW_STAR" = #{reviewStar},
+			"UPDATE_DATE" = now()
+		where
+			"REVIEW_NUM" = #{reviewNum}
+		and
+			"USERNAME" = #{username}
+		
+	</update>
+	
+	
+	<delete id="delete" parameterType="ReviewDTO">
+		delete from "TB_REVIEW"
+		where "REVIEW_NUM" = #{reviewNum}
+		and "USERNAME" = #{username}
+	</delete>
+
+
+
+</mapper>

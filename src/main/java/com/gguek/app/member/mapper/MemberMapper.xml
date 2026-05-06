@@ -7,40 +7,46 @@
 
 	<!-- INSERT: 회원 가입 -->
 	<insert id="join" parameterType="MemberDTO">
-		INSERT INTO "TB_MEMBER" ("USERNAME", "NAME", "PASSWORD", "PHONE", "EMAIL", "BIRTH")
-		VALUES (#{username}, #{name}, #{password}, #{phone}, #{email}, #{birth})
+		INSERT INTO "TB_MEMBER"
+		("USERNAME", "NAME", "PASSWORD", "PHONE", "EMAIL", "BIRTH")
+		VALUES
+		(#{username}, #{name}, #{password}, #{phone}, #{email}, #{birth})
 	</insert>
 
 	<!-- INSERT: 프로필 -->
 	<insert id="addProfile" parameterType="ProfileDTO">
-		INSERT INTO "TB_PROFILE" ("FILE_NAME", "ORIGIN_NAME", "USERNAME")
-		VALUES (#{fileName}, #{originName}, #{username})
+		INSERT INTO "TB_PROFILE"
+		("FILE_NAME", "ORIGIN_NAME", "USERNAME")
+		VALUES (#{fileName},
+		#{originName}, #{username})
 	</insert>
 
 	<!-- SELECT: 로그인 -->
-	<select id="detail" parameterType="MemberDTO" resultMap="detailResult">
+	<select id="detail" parameterType="MemberDTO"
+		resultMap="detailResult">
 		SELECT * FROM "TB_MEMBER" M
 		LEFT JOIN "TB_PROFILE" F
 		USING("USERNAME")
 		WHERE "USERNAME" = #{username}
 	</select>
 	<resultMap type="MemberDTO" id="detailResult">
-		<id column="USERNAME" property="username"/>
-		<result column="NAME" property="name"/>
-		<result column="PASSWORD" property="password"/>
-		<result column="PHONE" property="phone"/>
-		<result column="EMAIL" property="email"/>		
-		<result column="BIRTH" property="birth"/>
+		<id column="USERNAME" property="username" />
+		<result column="NAME" property="name" />
+		<result column="PASSWORD" property="password" />
+		<result column="PHONE" property="phone" />
+		<result column="EMAIL" property="email" />
+		<result column="BIRTH" property="birth" />
 		<association property="profileDTO" javaType="ProfileDTO">
-		<id column="FILE_NUM" property="fileNum"/>
-		<result column="FILE_NAME" property="fileName"/>
-		<result column="ORIGIN_NAME" property="originName"/>
+			<id column="FILE_NUM" property="fileNum" />
+			<result column="FILE_NAME" property="fileName" />
+			<result column="ORIGIN_NAME" property="originName" />
 		</association>
 	</resultMap>
-	
+
 
 	<!-- SELECT: 중복 확인 -->
-	<select id="selectOne" parameterType="String" resultType="MemberDTO">
+	<select id="selectOne" parameterType="String"
+		resultType="MemberDTO">
 		SELECT * FROM "TB_MEMBER"
 		WHERE "USERNAME" = #{username}
 	</select>
@@ -48,14 +54,21 @@
 	<!-- UPDATE: 회원 정보 수정 -->
 	<update id="update" parameterType="MemberDTO">
 		UPDATE "TB_MEMBER"
-		SET "NAME" = #{name}, "PASSWORD" = #{password}, "PHONE" = #{phone}, "EMAIL" = #{email}, "BIRTH" = #{birth}
+		<set>
+			<if test="name != null">"NAME" = #{name},</if>
+			<if test="password != null">"PASSWORD" = #{password},</if>
+			<if test="phone != null">"PHONE" = #{phone},</if>
+			<if test="email != null">"EMAIL" = #{email},</if>
+			<if test="birth != null">"BIRTH" = #{birth}</if>
+		</set>
 		WHERE "USERNAME" = #{username}
 	</update>
 
 	<!-- DELETE: 회원 삭제 -->
 	<delete id="delete" parameterType="String">
 		DELETE FROM "TB_MEMBER"
-		WHERE "USERNAME" = #{username}
+		WHERE
+		"USERNAME" = #{username}
 	</delete>
 
 </mapper>

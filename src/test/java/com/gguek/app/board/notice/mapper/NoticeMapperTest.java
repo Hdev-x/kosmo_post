@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.gguek.app.board.common.dto.BoardDTO;
-import com.gguek.app.board.notice.dto.NoticeDTO;
 import com.gguek.app.pager.Pager;
 
 import lombok.extern.slf4j.Slf4j;

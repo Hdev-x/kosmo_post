@@ -88,6 +88,11 @@ public class QnaService implements BoardService{
 		return result;
 	}
 	
+	@Override
+	public FileDTO fileDetail(FileDTO fileDTO) throws Exception {
+		// TODO Auto-generated method stub
+		return qnaMapper.fileDetail(fileDTO);
+	}
 	
 
 }

@@ -1,4 +1,4 @@
-package com.gguek.app.board.product.dto;
+package com.gguek.app.product.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,9 @@ public class ProductDTO {
 
 	private Long productNum;
 	private String productName;
-	private String productDesc;
+	private String productContents;
 	private String productType;
 	private Double productRate;
+	
+	private ProductFileDTO productFileDTO;
 }

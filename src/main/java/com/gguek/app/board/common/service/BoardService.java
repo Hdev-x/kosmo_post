@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gguek.app.board.common.dto.BoardDTO;
+import com.gguek.app.file.dto.FileDTO;
 import com.gguek.app.pager.Pager;
 
 public interface BoardService {
@@ -24,5 +25,8 @@ public interface BoardService {
 
 	// delete
 	int delete(BoardDTO boardDTO) throws Exception;
+	
+	
+	FileDTO fileDetail(FileDTO fileDTO) throws Exception;
 
 }

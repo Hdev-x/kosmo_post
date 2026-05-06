@@ -59,12 +59,17 @@
 										</div>
 										
 										
+										<div>
+											<button type="button" id="add">File Add</button>
+										</div>
 										
-										
-									 	<div class="form-group">
+									 	<div class="form-group" id="result">
 									 	<label>첨부파일</label>
-									 	<input type="file" name="attach" class="form-control">
-									 	<input type="file" name="attach" class="form-control">
+<!-- 									<input type="file" name="attach" class="form-control">
+									 	<input type="file" name="attach" class="form-control"> -->
+									 	
+									 	
+									 	
 									 	</div>
 
 
@@ -109,6 +114,7 @@
 				});
 	</script>
 
+	<script src="/js/board/form.js"></script>
 
 </body>
 </html>

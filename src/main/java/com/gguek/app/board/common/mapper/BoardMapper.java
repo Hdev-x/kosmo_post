@@ -34,4 +34,8 @@ public interface BoardMapper {
 	
 	//delete
 	int delete(BoardDTO boardDTO) throws Exception;
+	
+	
+	FileDTO fileDetail(FileDTO fileDTO) throws Exception;
 }
+	

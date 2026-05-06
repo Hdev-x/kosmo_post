@@ -67,7 +67,7 @@
 									<div>
 										<c:forEach var="file" items="${d.list}">
 											<div>
-											<img src="/files/${name}/${file.fileName}">
+											<a href="./down?fileNum=${file.fileNum}">${file.originName}</a>
 											</div>
 										</c:forEach>
 
@@ -106,5 +106,6 @@
 	</div>
 	<!-- End of Page Wrapper -->
 	<c:import url="/WEB-INF/views/temp/footer_script.jsp"></c:import>
+
 </body>
 </html>

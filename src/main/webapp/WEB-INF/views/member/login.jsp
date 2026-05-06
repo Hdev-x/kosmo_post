@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +20,8 @@
 
 				<div class="container-fluid">
 
-					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+					<div
+						class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">로그인</h1>
 					</div>
 
@@ -31,29 +33,36 @@
 								</div>
 								<div class="card-body">
 
-									<c:if test="${error != null}">
-										<div class="alert alert-danger" role="alert">${error}</div>
-									</c:if>
 
-									<form action="./login" method="post">
+									<form:form action="./login" modelAttribute="memberDTO"
+										method="post" enctype="multipart/form-data">
+
+										<%-- 서버에서 보낸 인증 실패 메시지 (아이디/비번 불일치) --%>
+										<c:if test="${not empty error}">
+											<div class="alert alert-danger" role="alert">${error}</div>
+										</c:if>
 
 										<div class="form-group">
-											<label for="username" class="font-weight-bold">아이디</label>
-											<input type="text" class="form-control" id="username"
-												name="username" placeholder="아이디를 입력하세요" required>
+											<form:label path="username">아이디</form:label>
+											<form:input path="username" cssClass="form-control"
+												placeholder="아이디를 입력하세요" />
+											<%-- 아이디 에러 메시지 표시 (빨간색 글씨 스타일 추가) --%>
+											<form:errors path="username" cssClass="text-danger" />
 										</div>
 
 										<div class="form-group">
-											<label for="password" class="font-weight-bold">비밀번호</label>
-											<input type="password" class="form-control" id="password"
-												name="password" placeholder="비밀번호를 입력하세요" required>
+											<form:label path="password">비밀번호</form:label>
+											<form:password path="password" cssClass="form-control"
+												placeholder="비밀번호를 입력하세요" />
+											<%-- 비밀번호 에러 메시지 표시 공간 추가 --%>
+											<form:errors path="password" cssClass="text-danger" />
 										</div>
 
-										<div class="text-center">
+										<div class="text-center mt-3">
 											<button type="submit" class="btn btn-primary px-5">로그인</button>
 										</div>
 
-									</form>
+									</form:form>
 
 									<hr>
 

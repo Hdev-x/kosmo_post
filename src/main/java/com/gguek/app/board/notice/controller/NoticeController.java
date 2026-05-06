@@ -15,7 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.gguek.app.board.common.dto.BoardDTO;
 import com.gguek.app.board.notice.dto.NoticeDTO;
+import com.gguek.app.board.notice.dto.NoticeFileDTO;
 import com.gguek.app.board.notice.service.NoticeService;
+import com.gguek.app.file.dto.FileDTO;
 import com.gguek.app.pager.Pager;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,21 @@ public class NoticeController {
 		return this.name;
 	}
 	
+	@GetMapping("down")
+	public String fileDown(NoticeFileDTO noticeFileDTO, Model model) throws Exception{
+		log.info("넘어온 파일 번호: {}", noticeFileDTO.getFileNum());
+		FileDTO fileDTO = noticeService.fileDetail(noticeFileDTO);
+		if (fileDTO == null) {
+	        log.error("DB에 파일 정보가 없습니다!");
+	        return "redirect:/notice/list"; 
+	    }
+		model.addAttribute("fileDTO", fileDTO);
+	    model.addAttribute("name", "notice"); // <--- 이 'name'이 View의 경로가 됨
+	    return "fileDownView";
+		
+		
+	}
+	
 	@GetMapping("list")
 	public String list(@ModelAttribute("pager") Pager pager, Model model) throws Exception{
 		List<BoardDTO> ar = noticeService.list(pager);
@@ -44,10 +61,16 @@ public class NoticeController {
 	}
 	
 	@GetMapping("detail")
-	public String detail(BoardDTO boardDTO, Model model) throws Exception {
-		boardDTO = noticeService.detail(boardDTO);
-		model.addAttribute("d", boardDTO);
-		return "board/detail";
+	public String detail(NoticeDTO noticeDTO, Model model) throws Exception {
+		BoardDTO boardDTO = noticeService.detail(noticeDTO);
+		if (boardDTO != null) {
+			model.addAttribute("d", boardDTO);
+			return "board/detail";
+		}else {
+			model.addAttribute("result", "존재하지 않는 글입니다.");
+			model.addAttribute("url", "./");
+			return "commons/result";
+		}
 		
 	}
 	
@@ -57,9 +80,13 @@ public class NoticeController {
 	}
 	
 	@PostMapping("create")
-	public String create(BoardDTO boardDTO, @RequestParam("attach") MultipartFile [] attach) throws Exception{
+	public String create(BoardDTO boardDTO, @RequestParam("attach") MultipartFile [] attach, Model model) throws Exception{
 		int result = noticeService.create(boardDTO, attach);
-		return "redirect:./list";
+		if (result>0) {
+			model.addAttribute("result", "글이 정상적으로 등록되었습니다.");
+			model.addAttribute("url", "./list");
+		}
+		return "commons/result";
 	}
 	
 	@GetMapping("update")

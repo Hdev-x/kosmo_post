@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gguek.app.cart.mapper.CartMapper">
+	<delete id="delete" parameterType="java.util.List">
+		DELETE FROM "TB_CART"
+		<foreach collection="list" item="item" open="where" separator="or">
+			"USERNAME"=#{item.username} AND "PRODUCT_NUM"=#{item.productNum}
+		</foreach>
+
+	</delete>
+
+	<!-- <delete id="delete" parameterType="CartDTO"> DELETE FROM "TB_CART" 
+		WHERE "USERNAME"=#{username} AND "PRODUCT_NUM"=#{productNum} </delete> -->
+
+	<insert id="create" parameterType="CartDTO">
+		INSERT INTO "TB_CART"
+		VALUES
+		(#{username}, #{productNum})
+	</insert>
+
+	<select id="list" parameterType="MemberDTO"
+		resultMap="joinResult">
+		select P.*, F.*
+		FROM "TB_CART" C
+		INNER join
+		"TB_PRODUCT" P
+		USING("PRODUCT_NUM")
+		LEFT JOIN
+		"TB_PRODUCT_FILE" F
+		USING("PRODUCT_NUM")
+		WHERE "USERNAME"=#{username};
+	</select>
+
+	<resultMap type="ProductDTO" id="joinResult">
+		<id column="PRODUCT_NUM" property="productNum" />
+		<result column="PRODUCT_NAME" property="productName" />
+		<result column="PRODUCT_CONTENTS" property="productContents" />
+		<result column="PRODUCT_TYPE" property="productType" />
+		<result column="PRODUCT_RATE" property="productRate" />
+		<association property="productFileDTO"
+			javaType="ProductFileDTO">
+			<id column="FILE_NUM" property="fileNum" />
+			<result column="FILE_NAME" property="fileName" />
+			<result column="ORI_NAME" property="oriName" />
+		</association>
+	</resultMap>
+
+
+</mapper>
