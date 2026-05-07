@@ -16,12 +16,10 @@ import com.gguek.app.file.manager.FileManager;
 import com.gguek.app.member.dto.GroupAdd;
 import com.gguek.app.member.dto.GroupUpdate;
 import com.gguek.app.member.dto.MemberDTO;
-import com.gguek.app.member.dto.ProfileDTO;
 import com.gguek.app.member.service.MemberService;
 import com.gguek.app.member.service.MemberServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
