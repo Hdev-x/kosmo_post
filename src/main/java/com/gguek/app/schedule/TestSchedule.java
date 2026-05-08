@@ -16,8 +16,8 @@ public class TestSchedule {
     //     System.out.println("고정 간격으로 반복 Delay");
     // }
 
-    @Scheduled(cron = "0 * * * * *")
-    public void useCron()throws Exception{
-        System.out.println("은지쿵냐 사룽해");
-    }
+    // @Scheduled(cron = "0 * * * * *")
+    // public void useCron()throws Exception{
+    //     System.out.println("은지쿵냐 사룽해");
+    // }
 }

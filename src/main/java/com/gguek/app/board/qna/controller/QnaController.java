@@ -1,6 +1,8 @@
 package com.gguek.app.board.qna.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,56 +27,63 @@ public class QnaController {
 
 	@Autowired
 	private QnaService qnaService;
-	
+
 	@Value("${app.board.qna}")
 	private String name;
-	
+
 	@ModelAttribute("name")
 	public String getName() {
 		return this.name;
 	}
-	
+
 	@GetMapping("list")
 	public String list(Pager pager, Model model) throws Exception {
 		List<BoardDTO> ar = qnaService.list(pager);
 		model.addAttribute("list", ar);
 		return "board/list";
 	}
-	
+
 	@GetMapping("detail")
 	public String detail(BoardDTO boardDTO, Model model) throws Exception {
 		boardDTO = qnaService.detail(boardDTO);
 		model.addAttribute("d", boardDTO);
 		return "board/detail";
 	}
-	
-	@GetMapping("create") 
-	public String create() throws Exception{
+
+	@GetMapping("create")
+	public String create() throws Exception {
 		return "board/create";
 	}
-	
-	@PostMapping("create")
-	public String create(BoardDTO boardDTO, @RequestParam("attach") MultipartFile [] attach) throws Exception{
+
+	@GetMapping("create2")
+	public String create(BoardDTO boardDTO, @RequestParam(name = "attach", required = false) MultipartFile[] attach)
+			throws Exception {
 		int result = qnaService.create(boardDTO, attach);
 		return "redirect:./list";
 	}
-	
+
 	@GetMapping("update")
-	public String update(QnaDTO qnaDTO, Model model) throws Exception{
+	public String update(QnaDTO qnaDTO, Model model) throws Exception {
 		BoardDTO boardDTO = qnaService.detail(qnaDTO);
 		model.addAttribute("d", boardDTO);
 		return "board/update";
 	}
-	
+
 	@PostMapping("update")
-	public String update(QnaDTO qnaDTO, @RequestParam("attach") MultipartFile [] attach) throws Exception{
+	public String update(QnaDTO qnaDTO, @RequestParam("attach") MultipartFile[] attach) throws Exception {
 		int result = qnaService.update(qnaDTO, attach);
 		return "redirect:./list";
 	}
-	
+
 	@PostMapping("delete")
 	public String delete(QnaDTO qnaDTO) throws Exception {
 		int result = qnaService.delete(qnaDTO);
 		return "redirect:./list";
+	
+
+
 	}
+
+	
+	
 }

@@ -5,6 +5,7 @@
 
 <mapper namespace="com.gguek.app.member.mapper.MemberMapper">
 
+
 	<!-- INSERT: 회원 가입 -->
 	<insert id="join" parameterType="MemberDTO">
 		INSERT INTO "TB_MEMBER"
@@ -27,6 +28,12 @@
 		SELECT * FROM "TB_MEMBER" M
 		LEFT JOIN "TB_PROFILE" F
 		USING("USERNAME")
+		INNER JOIN
+		"TB_MEMBER_ROLE"
+		USING("USERNAME")
+		INNER JOIN
+		"TB_ROLE"
+		USING ("ROLE_NUM")
 		WHERE "USERNAME" = #{username}
 	</select>
 	<resultMap type="MemberDTO" id="detailResult">
@@ -36,11 +43,20 @@
 		<result column="PHONE" property="phone" />
 		<result column="EMAIL" property="email" />
 		<result column="BIRTH" property="birth" />
+		<result column="ENABLED" property="enabled"/>
+		<result column="CREDENTIALS_NON_EXPIRED" property="credentialsNonExpired"/> 
+		<result column="ACCOUNT_NON_LOCKED" property="accountNonLocked"/>
+		<result column="ACCOUNT_NON_EXPIRED" property="accountNonExpired"/>
 		<association property="profileDTO" javaType="ProfileDTO">
 			<id column="FILE_NUM" property="fileNum" />
 			<result column="FILE_NAME" property="fileName" />
 			<result column="ORIGIN_NAME" property="originName" />
 		</association>
+	<collection property="roles" javaType="java.util.List" ofType="RoleDTO">
+		<id column="ROLE_NUM" property="roleNum" />
+		<result column="ROLE_NAME" property="roleName" />
+	</collection>
+	
 	</resultMap>
 
 

@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" isELIgnored="false"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+	pageEncoding="UTF-8" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <!DOCTYPE html>
 <html>
 
@@ -36,6 +37,8 @@
 									<form:form method="post" modelAttribute="memberDTO"
 										enctype="multipart/form-data" id="joinForm">
 
+
+									
 										<!-- 아이디 -->
 										<div class="form-group">
 											<label for="username" class="font-weight-bold">아이디</label>

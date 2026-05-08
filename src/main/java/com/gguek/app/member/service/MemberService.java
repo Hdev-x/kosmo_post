@@ -1,5 +1,7 @@
 package com.gguek.app.member.service;
 
+import java.util.List;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +30,7 @@ public interface MemberService {
 	
 	// 회원 삭제
 	int delete(String username) throws Exception;
+
 	
 
 }

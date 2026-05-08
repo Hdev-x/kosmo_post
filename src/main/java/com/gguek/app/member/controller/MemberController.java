@@ -109,45 +109,23 @@ public class MemberController {
 		}
 
 		// 가입 성공 로직
-		// memberService.join(memberDTO, file);
+		memberService.join(memberDTO, file);
 		return "redirect:/member/login";
 	}
 
-	// 로그인 페이지
-	@GetMapping("login")
-	public String login(Model model) throws Exception {
-		// 검증이 되지 않은 깨끗한 빈 객체를 생성해서 전달
-		model.addAttribute("memberDTO", new MemberDTO());
-		return "member/login"; // 명시적으로 뷰 이름을 리턴하는 것이 안전
-	}
+	// // 로그인 페이지
+	// @GetMapping("login")
+	// public String login(Model model) throws Exception {
+	// 	// 검증이 되지 않은 깨끗한 빈 객체를 생성해서 전달
+	// 	model.addAttribute("memberDTO", new MemberDTO());
+	// 	return "member/login"; // 명시적으로 뷰 이름을 리턴하는 것이 안전
+	// }
+	@GetMapping("login") // 시큐리티 설정의 loginPage 주소와 일치해야 함
+    public String login() {
+        return "member/login"; // 실제 jsp 파일의 위치 (WEB-INF/views/member/login.jsp)
+    }
 
-	// 로그인 처리
-	@PostMapping("login")
-	public String login(MemberDTO memberDTO, BindingResult bindingResult, HttpSession session, Model model)
-			throws Exception {
-		if (bindingResult.hasErrors()) {
-			model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다.");
-			return "member/login";
 
-		}
-
-		// 예시: 서비스에서 DB 조회를 통해 실제 회원인지 확인
-		MemberDTO loginResult = memberService.detail(memberDTO);
-
-		if (loginResult != null) {
-			session.setAttribute("member", loginResult); // DB에서 가져온 실제 정보를 세션에 저장
-			return "redirect:/";
-		} else {
-			model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다.");
-			return "member/login";
-		}
-	}
-
-	// 로그아웃
-	@GetMapping("logout")
-	public String logout(HttpSession session) throws Exception {
-		session.invalidate();
-		return "redirect:/";
-	}
+	
 
 }

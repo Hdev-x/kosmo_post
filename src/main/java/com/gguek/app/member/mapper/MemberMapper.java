@@ -1,6 +1,9 @@
 package com.gguek.app.member.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.gguek.app.member.dto.MemberDTO;
 import com.gguek.app.member.dto.ProfileDTO;
@@ -15,7 +18,7 @@ public interface MemberMapper {
 	int addProfile(ProfileDTO profileDTO) throws Exception;
 
 	// SELECT: 회원 조회 (ID로)
-	MemberDTO detail(MemberDTO memberDTO) throws Exception;
+	MemberDTO detail(MemberDTO memberDTO) throws UsernameNotFoundException;
 
 	// SELECT: 중복 확인
 	MemberDTO selectOne(String username) throws Exception;
@@ -25,5 +28,6 @@ public interface MemberMapper {
 
 	// DELETE: 회원 삭제
 	int delete(String username) throws Exception;
+
 
 }

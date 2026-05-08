@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,12 +41,15 @@ body {
 						<h1 class="h3 mb-0 text-gray-800 font-weight-bold">
 							<i class="fas fa-list-ul mr-2"></i>공지사항
 						</h1>
+
+					<sec:authorize access="hasRole('MEMBER')">
 						<a href="./create"
 							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
 							<i class="fas fa-plus fa-sm text-white-50 mr-1"></i> 글쓰기
 						</a>
+					</sec:authorize>	
 					</div>
-
+					
 
 
 					<div class="card shadow mb-4">

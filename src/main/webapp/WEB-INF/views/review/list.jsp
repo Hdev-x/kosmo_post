@@ -20,6 +20,7 @@
                         </div>
                     </div>
                     
+                    
                     <div class="review-actions" id="action_btns_${r.reviewNum}">
                         <c:if test="${sessionScope.member.username eq r.username}">
                             <button type="button" class="btn btn-sm btn-outline-primary mr-1" 
